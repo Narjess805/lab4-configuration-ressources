@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: broken
+spec:
+  containers:
+    - name: app
+      image: nginx:1.26-alpine
+      envFrom:
+        - configMapRef:
+            name: config-manquant

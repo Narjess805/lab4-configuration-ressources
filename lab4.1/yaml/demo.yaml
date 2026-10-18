@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+        - name: demo
+          image: nginx:1.26-alpine
+          env:
+            - name: NIVEAU_LOG                 # une clé, sous un autre nom
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: LOG_LEVEL
+            - name: DB_USER                    # clés du Secret
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: DB_PASSWORD
+          envFrom:                             # toutes les clés du ConfigMap
+            - configMapRef:
+                name: app-config
+          volumeMounts:
+            - name: config
+              mountPath: /etc/app
+            - name: secret
+              mountPath: /etc/secret
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: app-config
+        - name: secret
+          secret:
+            secretName: db-credentials

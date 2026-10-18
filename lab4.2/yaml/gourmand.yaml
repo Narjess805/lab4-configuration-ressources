@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gourmand
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gourmand
+  template:
+    metadata:
+      labels:
+        app: gourmand
+    spec:
+      containers:
+        - name: app
+          image: nginx:1.26-alpine
+          resources:
+            requests:
+              memory: 8Gi   # volontairement trop grand : à corriger en 64Mi
