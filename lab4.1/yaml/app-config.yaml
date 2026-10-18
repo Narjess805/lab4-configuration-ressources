@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-config
-data:
-  APP_ENV: dev
-  APP_COLOR: bleu
-  LOG_LEVEL: info
